@@ -1,0 +1,137 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #15aaaa;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 4rem 1rem;
+    overflow: hidden;
+}
+
+@media (min-width: 640px) {
+    .container {
+        max-width: 640px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1024px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1280px;
+    }
+}
+
+@media (min-width: 1536px) {
+    .container {
+        max-width: 1536px;
+    }
+}
+
+.title {
+    font-size: 2.5rem;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: white;
+}
+
+@media (min-width: 640px) {
+    .title {
+        font-size: 3.5rem;
+    }
+}
+
+.yellowSpan {
+    color: #e4f714;
+}
+.greenSpan {
+    color: #03f730;
+}
+.blueSpan {
+    color: #68ffff
+}
+.redSpan {
+    color: #9f0000
+}
+.cardRow {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .cardRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .cardRow {
+        gap: 2rem;
+    }
+}
+
+.card,
+.button {
+    max-width: 35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    color: white;
+    background-color: rgb(255 255 255 / 0.1);
+    user-select: none;
+    text-align: center;
+}
+
+.card {
+    background-color: rgb(0 0 0 / 0.2);
+}
+
+.button:hover {
+    background-color: rgb(255 255 255 / 0.2);
+    transition: background-color 150ms cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+.cardTitle {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 0.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+.cardPlayerId {
+    text-align: center;
+    font-weight: 700;
+    margin-top: 12vh;
+    font-size: 11vh;
+    line-height: 0rem;
+    color: white;
+}
+.cardText {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}

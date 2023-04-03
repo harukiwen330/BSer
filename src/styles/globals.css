@@ -1,0 +1,79 @@
+@font-face {
+    font-family: "CascadiaCode";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaCode.ttf");
+}
+
+@font-face {
+    font-family: "CascadiaCode";
+    font-style: italic;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaCodeItalic.ttf");
+}
+
+@font-face {
+    font-family: "CascadiaMono";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaMono.ttf");
+}
+
+@font-face {
+    font-family: "CascadiaMono";
+    font-style: italic;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaMonoItalic.ttf");
+}
+
+@font-face {
+    font-family: "CascadiaPL";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaCodePL.ttf");
+}
+
+@font-face {
+    font-family: "CascadiaPL";
+    font-style: italic;
+    font-weight: 700;
+    src: url("../fonts/CascadiaCode/CascadiaCodePLItalic.ttf");
+}
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #4dffff;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #4dffff;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #4dffff;
+}
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: CascadiaPL, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+body::-webkit-scrollbar {
+    display: none;
+}
+button,
+input {
+    border: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+* {
+    box-sizing: border-box;
+}

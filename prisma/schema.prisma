@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Room {
+    users         User[]
+    playerIds     String[]
+    roomId        String   @id
+    title         String
+    category      String
+    text          String
+    isGameStart   Boolean
+    isShowingText Boolean
+    isShushUsed   Boolean
+    isChoiceUsed  Boolean
+    updateAt      DateTime @updatedAt
+}
+
+model User {
+    room               Room     @relation(fields: [roomId], references: [roomId])
+    name               String
+    roomId             String
+    userId             String   @id
+    isHost             Boolean
+    isTruther          Boolean
+    isLiar             Boolean
+    isFinder           Boolean
+    isShushed          Boolean // non-Finder
+    isChosen           Boolean // non-Finder
+    isCorrectlyShushed Boolean // Finder only : check shush result
+    isCorrectlyChosen  Boolean // Finder only : check shush result
+    score              Int
+    updateAt           DateTime @updatedAt
+}
