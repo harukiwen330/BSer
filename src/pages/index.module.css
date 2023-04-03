@@ -5,6 +5,9 @@
     justify-content: center;
     min-height: 100vh;
     background: #15aaaa;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .container {
@@ -70,10 +73,10 @@
     color: #03f730;
 }
 .blueSpan {
-    color: #68ffff
+    color: #68ffff;
 }
 .redSpan {
-    color: #9f0000
+    color: #9f0000;
 }
 .cardRow {
     display: grid;
