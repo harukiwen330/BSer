@@ -17,7 +17,7 @@ export type WikipediaProps = {
 const Lobby: NextPage = () => {
     const router = useRouter();
     const {roomId, userId} = router.query as {roomId: string; userId: string};
-    const url = "https://alright-shutup.vercel.app".concat(router.asPath.replace(`/user/${userId}`, ""));
+    const url = "https://bser.vercel.app".concat(router.asPath.replace(`/user/${userId}`, ""));
     const utils = api.useContext();
     const room = api.room.getRoom.useQuery({roomId: roomId}, {refetchInterval: 500}).data;
     const user = api.user.getUser.useQuery({userId: userId}, {refetchInterval: 500}).data;
