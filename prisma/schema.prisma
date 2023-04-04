@@ -12,6 +12,7 @@ datasource db {
 
 model Room {
     users         User[]
+    lang          String
     playerIds     String[]
     roomId        String   @id
     title         String

@@ -5,7 +5,7 @@ import styles from "../../pages/index.module.css";
 
 const GithubBtn = () => {
     return (
-        <Link className={styles.button} href="https://github.com/harukiwen330/YouLiar" target="_blank">
+        <Link className={styles.button} href="https://github.com/harukiwen330/Bser" target="_blank">
             <h3 className={styles.cardTitle}>
                 <span className={styles.yellowSpan}>
                     <Github />

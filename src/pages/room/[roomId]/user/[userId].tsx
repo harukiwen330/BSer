@@ -7,6 +7,8 @@ import Ready from "~/components/Ready";
 import {newScore} from "~/functions/newScore";
 import {shuffleRole} from "~/functions/shuffleRole";
 import {api} from "../../../../utils/api";
+import en from "~/languages/en.json";
+import zh from "~/languages/zh.json";
 
 export type WikipediaProps = {
     title: string;
@@ -97,8 +99,9 @@ const Lobby: NextPage = () => {
         await router.push("/");
     };
     if (!room || !user || room === undefined || user === undefined || roomUsers === undefined) return <Loading returnMenu={returnMenu as VoidFunction} />;
+    const langJson = room.lang === "en" ? en : zh;
     const roomPlayers = roomUsers.filter((player) => room?.playerIds.includes(player.userId));
-    const role = user.isTruther ? "Truth Teller" : user.isFinder ? "Finder" : "Liar";
+    const role = user.isTruther ? langJson.truther : user.isFinder ? langJson.finder : langJson.liar;
     const roomPlayersNoFinder = roomPlayers?.slice().filter((player) => !player.isFinder);
 
     const handleNewGame = () => {
@@ -155,9 +158,10 @@ const Lobby: NextPage = () => {
     };
     return (
         <>
-            {!user.isTruther && !user.isLiar && !user.isFinder && <Ready roomId={roomId} url={url} isHost={user.isHost} roomUsers={roomUsers} handleLeave={handleLeave as VoidFunction} handleNewGame={handleNewGame} />}
+            {!user.isTruther && !user.isLiar && !user.isFinder && <Ready langJson={langJson} roomId={roomId} url={url} isHost={user.isHost} roomUsers={roomUsers} handleLeave={handleLeave as VoidFunction} handleNewGame={handleNewGame} />}
             {(user.isTruther || user.isLiar || user.isFinder) && (
                 <Player
+                    langJson={langJson}
                     role={role}
                     room={room}
                     roomPlayers={roomPlayers}

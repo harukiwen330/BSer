@@ -1,5 +1,6 @@
 import type {Room, User} from "@prisma/client";
 import React from "react";
+import type {LangJsonProps} from "~/languages/langJsonProps";
 import styles from "../../pages/index.module.css";
 import PlayerIdTag from "../Tools/PlayerIdTag";
 import ScoreBoard from "../Tools/ScoreBoard";
@@ -7,6 +8,7 @@ import TopicInfo from "../Tools/TopicInfo";
 import TruthInfo from "../Tools/TruthInfo";
 
 type LiarProps = {
+    langJson: LangJsonProps;
     isChoosingWord: boolean;
     isWaitingPlayer: boolean;
     isShushingPlayer: boolean;
@@ -17,12 +19,12 @@ type LiarProps = {
     roomPlayers: User[];
     role: string;
 };
-const Liar = ({isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlayer, isResult, room, user, roomPlayers, role}: LiarProps) => {
+const Liar = ({langJson, isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlayer, isResult, room, user, roomPlayers, role}: LiarProps) => {
     return (
         <div className={styles.container}>
             {isChoosingWord && (
                 <div className={styles.card}>
-                    <p>Waiting for Finder to pick the word.</p>
+                    <p>{langJson.waitingOther}</p>
                 </div>
             )}
             {isWaitingPlayer && (
@@ -33,7 +35,7 @@ const Liar = ({isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlay
                     <div className={styles.card}>
                         <h2>{room.title}</h2>
                         <p>{room.category}</p>
-                        <p style={{textAlign:"left"}}>Pretend you&apos;re reading the definition! Invent the description and convince the Finder that it&apos;s true! The Truth Teller has details such as the event&apos;s date, specific information, and location. Some provided paragraphs can be quite lengthy! Mimicking the act of scrolling down can enhance the realism of your acting!</p>
+                        <p style={{textAlign: "left"}}>{langJson.readingLiar}</p>
                     </div>
                     <h1 style={{color: "white"}} className={styles.cardText}>
                         {role}
@@ -42,26 +44,26 @@ const Liar = ({isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlay
             )}
             {isShushingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <div className={styles.card}>
-                        <p>Finder will shush a player</p>
+                        <p>{langJson.shushOther}</p>
                     </div>
                 </>
             )}
             {isChoosingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <div className={styles.card}>
-                        <p>Finder will choose who is Truth Teller</p>
+                        <p>{langJson.pickOther}</p>
                     </div>
                 </>
             )}
             {isResult && (
                 <>
-                    <PlayerIdTag user={user} />
-                    <ScoreBoard roomPlayers={roomPlayers} />
+                    <PlayerIdTag langJson={langJson} user={user} />
+                    <ScoreBoard langJson={langJson} roomPlayers={roomPlayers} />
                     <TruthInfo room={room} />
                 </>
             )}

@@ -8,9 +8,15 @@ export const roomRouter = createTRPCRouter({
             where: {roomId: input.roomId}
         });
     }),
-    createRoom: publicProcedure.input(z.object({roomId: z.string(), userId: z.string(), name: z.string()})).mutation(({ctx, input}) => {
+    createRoom: publicProcedure.input(z.object({
+        lang: z.string(),
+        roomId: z.string(), 
+        userId: z.string(), 
+        name: z.string()
+    })).mutation(({ctx, input}) => {
         return ctx.prisma.room.create({
             data: {
+                lang: input.lang,
                 roomId: input.roomId,
                 users: {
                     create: {

@@ -1,5 +1,6 @@
 import type {Room, User} from "@prisma/client";
 import React from "react";
+import type { LangJsonProps } from "~/languages/langJsonProps";
 import styles from "../../pages/index.module.css";
 import PlayerIdTag from "../Tools/PlayerIdTag";
 import ScoreBoard from "../Tools/ScoreBoard";
@@ -7,6 +8,7 @@ import TopicInfo from "../Tools/TopicInfo";
 import TruthInfo from "../Tools/TruthInfo";
 
 type TrutherProps = {
+    langJson: LangJsonProps;
     isChoosingWord: boolean;
     isWaitingPlayer: boolean;
     isShushingPlayer: boolean;
@@ -17,18 +19,18 @@ type TrutherProps = {
     roomPlayers: User[];
     role: string;
 };
-const Truther = ({isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlayer, isResult, room, user, roomPlayers, role}: TrutherProps) => {
+const Truther = ({langJson, isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingPlayer, isResult, room, user, roomPlayers, role}: TrutherProps) => {
     return (
         <div className={styles.container}>
             {isChoosingWord && (
                 <div className={styles.card}>
-                    <p>Waiting for Finder to pick the word.</p>
+                    <p>{langJson.waitingOther}</p>
                 </div>
             )}
             {isWaitingPlayer && (
                 <>
                     <h2 className={styles.cardTitle}>
-                        <span className={styles.yellowSpan}>30s</span> to read
+                        <span className={styles.yellowSpan}>{langJson.readingOther}</span>
                     </h2>
                     <TruthInfo room={room} />
                     <h1 style={{color: "white"}} className={styles.cardText}>
@@ -38,26 +40,26 @@ const Truther = ({isChoosingWord, isWaitingPlayer, isShushingPlayer, isChoosingP
             )}
             {isShushingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <div className={styles.card}>
-                        <p>Finder will shush a player</p>
+                        <p>{langJson.shushOther}</p>
                     </div>
                 </>
             )}
             {isChoosingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <div className={styles.card}>
-                        <p>Finder will choose who is Truth Teller</p>
+                        <p>{langJson.pickOther}</p>
                     </div>
                 </>
             )}
             {isResult && (
                 <>
-                    <PlayerIdTag user={user} />
-                    <ScoreBoard roomPlayers={roomPlayers} />
+                    <PlayerIdTag langJson={langJson} user={user} />
+                    <ScoreBoard langJson={langJson} roomPlayers={roomPlayers} />
                     <TruthInfo room={room} />
                 </>
             )}

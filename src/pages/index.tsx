@@ -6,6 +6,8 @@ import Menu from "~/components/Menu";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import Entering from "~/components/Entering";
+import en from "../languages/en.json";
+import zh from "../languages/zh.json";
 
 const alphabet = "3456789ABCDEFGHJKMNPQRSTUVWXY";
 
@@ -14,6 +16,8 @@ const Home: NextPage = () => {
     const utils = api.useContext();
     const [playerName, setPlayerName] = useState("");
     const [joinRoomId, setJoinRoomId] = useState("");
+    const [lang, setLang] = useState("en");
+    const [langJson, setLangJson] = useState(en);
 
     const [roomId] = useState(customAlphabet(alphabet, 4));
     const [userId] = useState(nanoid);
@@ -39,12 +43,21 @@ const Home: NextPage = () => {
     const handleHost = () => {
         cleanUsers.mutate();
         cleanRoom.mutate();
-        createRoom.mutate({roomId: roomId, name: playerName, userId: userId});
+        createRoom.mutate({roomId: roomId, name: playerName, userId: userId, lang: lang});
     };
     const handleJoin = () => {
         cleanUsers.mutate();
         cleanRoom.mutate();
         createUser.mutate({roomId: joinRoomId, name: playerName, userId: userId});
+    };
+    const handleLangChange = () => {
+        if (lang === "en") {
+            setLang("zh");
+            setLangJson(zh);
+        } else {
+            setLang("en");
+            setLangJson(en);
+        }
     };
     if (room !== null || room !== undefined) {
         return (
@@ -54,8 +67,7 @@ const Home: NextPage = () => {
                     <meta name="description" content="A Game Full of BS." />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
-
-                <Menu room={room} playerName={playerName} setPlayerName={setPlayerName} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} handleJoin={handleJoin} handleHost={handleHost} />
+                <Menu lang={lang} langJson={langJson} room={room} playerName={playerName} setPlayerName={setPlayerName} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} handleJoin={handleJoin} handleHost={handleHost} handleLangChange={handleLangChange}/>
             </>
         );
     }

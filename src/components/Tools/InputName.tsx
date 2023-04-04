@@ -1,24 +1,31 @@
 import React, {type Dispatch, type SetStateAction} from "react";
 import {Pen} from "react-bootstrap-icons";
+import type {LangJsonProps} from "~/languages/langJsonProps";
 import styles from "../../pages/index.module.css";
 type InputJoinIdProps = {
+    langJson: LangJsonProps;
     isConfirmName: boolean;
     setIsConfirmName: Dispatch<SetStateAction<boolean>>;
     playerName: string;
     setPlayerName: Dispatch<SetStateAction<string>>;
 };
 
-const InputName = ({isConfirmName, setIsConfirmName, playerName, setPlayerName}: InputJoinIdProps) => {
+const InputName = ({langJson, isConfirmName, setIsConfirmName, playerName, setPlayerName}: InputJoinIdProps) => {
     if (isConfirmName) {
         return (
-            <div style={{alignItems: "center"}} className={styles.card}>
+            <>
                 <div className={styles.cardRow}>
-                    <p>Hello {playerName}!</p>
+                    <div className={styles.card}>
+                        <p>
+                            {langJson.greet}{" "}
+                            {playerName}!
+                        </p>
+                    </div>
+                    <div style={{alignItems: "center"}} className={styles.button} onClick={() => setIsConfirmName(false)}>
+                        <Pen />
+                    </div>
                 </div>
-                <div className={styles.button} onClick={() => setIsConfirmName(false)}>
-                    <Pen />
-                </div>
-            </div>
+            </>
         );
     }
     return (
@@ -28,7 +35,7 @@ const InputName = ({isConfirmName, setIsConfirmName, playerName, setPlayerName}:
                 autoFocus
                 onChange={(event) => setPlayerName(event.target.value)}
                 maxLength={7}
-                placeholder={`Your Name (max 7)`}
+                placeholder={langJson.namePlaceHolder}
                 value={playerName}
                 className={styles.cardTitle}
             />

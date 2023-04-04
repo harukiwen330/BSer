@@ -1,5 +1,6 @@
 import type {Room, User} from "@prisma/client";
 import React from "react";
+import type {LangJsonProps} from "../languages/langJsonProps";
 import styles from "../pages/index.module.css";
 import Finder from "./Roles/Finder";
 import Liar from "./Roles/Liar";
@@ -7,6 +8,7 @@ import Truther from "./Roles/Truther";
 import MenuBtn from "./Tools/MenuBtn";
 
 type PlyerProps = {
+    langJson: LangJsonProps;
     role: string;
     room: Room;
     roomPlayers: User[];
@@ -20,7 +22,7 @@ type PlyerProps = {
     handleLeave: () => void;
 };
 
-const Player = ({ role, user, roomPlayersNoFinder, roomPlayers, room, handleTimesUp, handleLockWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
+const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room, handleTimesUp, handleLockWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
     const isChoosingWord = room.title === "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isWaitingPlayer = room.title !== "" && room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isShushingPlayer = room.title !== "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
@@ -30,6 +32,7 @@ const Player = ({ role, user, roomPlayersNoFinder, roomPlayers, room, handleTime
         <main className={styles.main}>
             {user.isFinder && (
                 <Finder
+                    langJson={langJson}
                     isChoosingWord={isChoosingWord}
                     isChoosingPlayer={isChoosingPlayer}
                     isWaitingPlayer={isWaitingPlayer}
@@ -49,6 +52,7 @@ const Player = ({ role, user, roomPlayersNoFinder, roomPlayers, room, handleTime
             )}
             {user.isTruther && (
                 <Truther
+                    langJson={langJson}
                     isChoosingWord={isChoosingWord}
                     isChoosingPlayer={isChoosingPlayer}
                     isWaitingPlayer={isWaitingPlayer}
@@ -62,6 +66,7 @@ const Player = ({ role, user, roomPlayersNoFinder, roomPlayers, room, handleTime
             )}
             {user.isLiar && (
                 <Liar
+                    langJson={langJson}
                     isChoosingWord={isChoosingWord}
                     isChoosingPlayer={isChoosingPlayer}
                     isWaitingPlayer={isWaitingPlayer}

@@ -7,8 +7,10 @@ import PlayerIdTag from "../Tools/PlayerIdTag";
 import ChoosePlayer from "../Tools/ChoosePlayer";
 import TopicInfo from "../Tools/TopicInfo";
 import TruthInfo from "../Tools/TruthInfo";
+import type {LangJsonProps} from "~/languages/langJsonProps";
 
 type FinderProps = {
+    langJson: LangJsonProps;
     isChoosingWord: boolean;
     isWaitingPlayer: boolean;
     isShushingPlayer: boolean;
@@ -27,6 +29,7 @@ type FinderProps = {
 };
 
 const Finder = ({
+    langJson,
     isChoosingWord,
     isWaitingPlayer,
     isShushingPlayer,
@@ -66,11 +69,18 @@ const Finder = ({
             // eslint-disable-next-line
             const response = require("wtf_wikipedia").extend(require("wtf-plugin-api")).extend(require("wtf-plugin-classify"));
             // eslint-disable-next-line
-            const getRandomPage = response.getRandomPage as (options: {lang: string}) => Promise<{title: () => string; classify: () => {type: string}; text: () => string}>;
-            const doc = await getRandomPage({lang: "en"});
-            const title: string = doc.title();
-            const category: string = doc.classify().type;
-            const text: string = doc.text();
+            const OpenCC = require("opencc-js");
+            // eslint-disable-next-line
+            const converter = OpenCC.Converter({from: "cn", to: "hk"});
+            // eslint-disable-next-line
+            const getRandomPage = response.getRandomPage as (options: {lang: string}) => Promise<{title: () => string; classify: () => {type: string}; category: () => string; text: () => string}>;
+            const doc = await getRandomPage({lang: room.lang});
+            // eslint-disable-next-line
+            const title: string = room.lang === "en" ? doc.title() : converter(doc.title());
+            // eslint-disable-next-line
+            const category: string = room.lang === "en" ? doc.classify().type : converter(doc.category());
+            // eslint-disable-next-line
+            const text: string = room.lang === "en" ? doc.text() : converter(doc.text());
 
             setWords({
                 title: title,
@@ -98,16 +108,16 @@ const Finder = ({
             {isChoosingWord && (
                 <>
                     <h1 className={styles.cardTitle}>
-                        Choose a <span className={styles.yellowSpan}> weird word</span>
+                        <span className={styles.yellowSpan}>{langJson.chooseWordMsg}</span>
                     </h1>
                     <div className={styles.card}>
                         <h2>{words.title}</h2>
                         <p>{words.category}</p>
                         <div style={{textAlign: "center"}} className={styles.button} onClick={handleChosenWord}>
-                            <span className={styles.yellowSpan}>Play with this Topic</span>
+                            <span className={styles.yellowSpan}>{langJson.choose}</span>
                         </div>
                         <div style={{textAlign: "center"}} className={styles.button} onClick={handleNextWord}>
-                            Change Topic
+                            {langJson.change}
                         </div>
                     </div>
                 </>
@@ -115,14 +125,12 @@ const Finder = ({
             {isWaitingPlayer && (
                 <>
                     <h1 className={styles.cardTitle}>
-                        Wait for <span className={styles.yellowSpan}>30s</span>
+                        <span className={styles.yellowSpan}>{langJson.waitFinder}</span>
                     </h1>
                     <TopicInfo room={room} />
                     <div className={styles.card}>
-                        <p className={styles.cardText}>After 30s, listen carefully to players&apos; definitions.</p>
-                        <p className={styles.cardText}>
-                            <span className={styles.redSpan}>Shush</span> a player who you think is talking bs.
-                        </p>
+                        <p className={styles.cardText}>{langJson.waitFinderMsg1}</p>
+                        <p className={styles.cardText}>{langJson.waitFinderMsg2}</p>
                     </div>
                     <h1 style={{color: "white"}} className={styles.cardText}>
                         {role}
@@ -131,28 +139,28 @@ const Finder = ({
             )}
             {isShushingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <p className={styles.cardTitle}>
-                        <span className={styles.redSpan}>Shush</span> a player
+                        <span className={styles.redSpan}>{langJson.shushFinder}</span>
                     </p>
                     <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleShush} />
                 </>
             )}
             {isChoosingPlayer && (
                 <>
-                    <PlayerIdTag user={user} />
+                    <PlayerIdTag langJson={langJson} user={user} />
                     <TopicInfo room={room} />
                     <h2 className={styles.cardTitle}>
-                        Pick the <span className={styles.greenSpan}>Truth Teller</span>
+                        <span className={styles.greenSpan}>{langJson.pickFinder}</span>
                     </h2>
                     <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleChoose} />
                 </>
             )}
             {isResult && (
                 <>
-                    <PlayerIdTag user={user} />
-                    <ScoreBoard roomPlayers={roomPlayers} />
+                    <PlayerIdTag langJson={langJson} user={user} />
+                    <ScoreBoard langJson={langJson} roomPlayers={roomPlayers} />
                     <div
                         style={{textAlign: "center"}}
                         className={styles.button}
@@ -161,9 +169,9 @@ const Finder = ({
                             void fetchWords();
                         }}
                     >
-                        New Game
+                        {langJson.newGame}
                     </div>
-                    <TruthInfo room={room}/> 
+                    <TruthInfo room={room} />
                 </>
             )}
         </div>

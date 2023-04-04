@@ -1,13 +1,15 @@
 import React from "react";
+import type { LangJsonProps } from "~/languages/langJsonProps";
 import styles from "../../pages/index.module.css";
 
 type JoinBtnProps = {
+    langJson: LangJsonProps
     handleJoin: () => void;
 };
-const JoinBtn = ({handleJoin}: JoinBtnProps) => {
+const JoinBtn = ({langJson, handleJoin}: JoinBtnProps) => {
     return (
         <div onClick={handleJoin} className={styles.button}>
-            <h3 className={styles.cardTitle}>JOIN</h3>
+            <h3 className={styles.cardTitle}>{langJson.join}</h3>
         </div>
     );
 };

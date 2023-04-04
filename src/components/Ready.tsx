@@ -4,8 +4,10 @@ import styles from "../pages/index.module.css";
 import MenuBtn from "./Tools/MenuBtn";
 import NewBtn from "./Tools/NewBtn";
 import type {User} from "@prisma/client";
+import type {LangJsonProps} from "~/languages/langJsonProps";
 
 type ReadyProps = {
+    langJson: LangJsonProps;
     roomId: string;
     url: string;
     isHost: boolean;
@@ -14,7 +16,7 @@ type ReadyProps = {
     handleNewGame: () => void;
 };
 
-const Ready = ({roomId, url, isHost, roomUsers, handleLeave, handleNewGame}: ReadyProps) => {
+const Ready = ({langJson, roomId, url, isHost, roomUsers, handleLeave, handleNewGame}: ReadyProps) => {
     return (
         <main className={styles.main}>
             <h1 className={styles.title}>{roomId}</h1>
@@ -22,17 +24,17 @@ const Ready = ({roomId, url, isHost, roomUsers, handleLeave, handleNewGame}: Rea
                 <i>{roomUsers.length}/7</i>
             </span>
             <div className={styles.container}>
-                <QrCode url={url} />
+                <QrCode langJson={langJson} url={url} />
 
                 {!isHost && (
                     <h3 className={styles.cardText}>
                         <span className={styles.yellowSpan}>
-                            <i>{roomUsers.length < 3 ? "Not enough players" : "Wait for host"}</i>
+                            <i>{roomUsers.length < 3 ? langJson.notEnoughMsg : langJson.waitHostMsg}</i>
                         </span>
                     </h3>
                 )}
 
-                {isHost && roomUsers.length >= 3 && roomUsers.length <= 7 && <NewBtn handleNewGame={handleNewGame} />}
+                {isHost && roomUsers.length >= 3 && roomUsers.length <= 7 && <NewBtn langJson={langJson} handleNewGame={handleNewGame} />}
                 <MenuBtn returnMenu={handleLeave} />
             </div>
         </main>

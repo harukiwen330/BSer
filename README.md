@@ -23,4 +23,6 @@
 # Todo list in the Project
 1. Add management for host to kick players if needed.
 2. Considering a array list of players who have not been a Finder, to make sure all players at least have a chance to guess
+3. Add Chinese version
+- Consider the wtf_wikipedia .category in chinese works better than en 
     

@@ -5,8 +5,10 @@ import JoinBtn from "./Tools/JoinBtn";
 import MenuBtn from "./Tools/MenuBtn";
 import InputName from "./Tools/InputName";
 import {CheckCircleFill} from "react-bootstrap-icons";
+import type { LangJsonProps } from "~/languages/langJsonProps";
 
 type GuestProps = {
+    langJson: LangJsonProps;
     playerName: string;
     setPlayerName: Dispatch<SetStateAction<string>>;
     roomUsers: User[];
@@ -15,7 +17,7 @@ type GuestProps = {
     handleJoin: () => void;
 };
 
-const Guest = ({playerName, setPlayerName, roomUsers, roomId, returnMenu, handleJoin}: GuestProps) => {
+const Guest = ({langJson, playerName, setPlayerName, roomUsers, roomId, returnMenu, handleJoin}: GuestProps) => {
     const nameNotEmpty = playerName.replace(/[\W_]+/g, "") !== "";
     const [isConfirmName, setIsConfirmName] = useState(false);
     return (
@@ -23,15 +25,15 @@ const Guest = ({playerName, setPlayerName, roomUsers, roomId, returnMenu, handle
             <div className={styles.container}>
                 <h1 className={styles.title}>{roomId}</h1>
                 
-                <InputName isConfirmName={isConfirmName} setIsConfirmName={setIsConfirmName} playerName={playerName} setPlayerName={setPlayerName} />
+                <InputName langJson={langJson} isConfirmName={isConfirmName} setIsConfirmName={setIsConfirmName} playerName={playerName} setPlayerName={setPlayerName} />
 
                 {!isConfirmName && nameNotEmpty && (
-                    <div className={styles.card} onClick={() => setIsConfirmName(true)}>
+                    <div className={styles.button} onClick={() => setIsConfirmName(true)}>
                         <CheckCircleFill />
                     </div>
                 )}
 
-                {isConfirmName && roomUsers.length <= 7 && nameNotEmpty && <JoinBtn handleJoin={handleJoin} />}
+                {isConfirmName && roomUsers.length <= 7 && nameNotEmpty && <JoinBtn langJson={langJson} handleJoin={handleJoin} />}
                 <MenuBtn returnMenu={returnMenu} />
             </div>
         </main>

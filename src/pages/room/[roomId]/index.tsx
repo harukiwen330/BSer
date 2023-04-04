@@ -5,6 +5,8 @@ import {nanoid} from "nanoid";
 import Guest from "~/components/Guest";
 import Loading from "~/components/Loading";
 import {useState} from "react";
+import en from "../../../languages/en.json"
+import zh from "../../../languages/zh.json"
 
 const WaitingRoom: NextPage = () => {
     const [playerName, setPlayerName] = useState("");
@@ -28,12 +30,14 @@ const WaitingRoom: NextPage = () => {
     const handleJoin = () => {
         createUser.mutate({roomId: roomId, userId: userId, name:playerName});
     };
-
+    
     if (!room || room === undefined || roomUsers === undefined) {
         return <Loading returnMenu={returnMenu as VoidFunction} />;
     }
+    const langJson = (room.lang === 'en') ? en : zh;
 
     return <Guest 
+        langJson = {langJson}
         playerName ={playerName}
         setPlayerName = {setPlayerName}
         roomUsers={roomUsers} 
