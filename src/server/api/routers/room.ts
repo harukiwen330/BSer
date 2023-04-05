@@ -8,42 +8,47 @@ export const roomRouter = createTRPCRouter({
             where: {roomId: input.roomId}
         });
     }),
-    createRoom: publicProcedure.input(z.object({
-        lang: z.string(),
-        roomId: z.string(), 
-        userId: z.string(), 
-        name: z.string()
-    })).mutation(({ctx, input}) => {
-        return ctx.prisma.room.create({
-            data: {
-                lang: input.lang,
-                roomId: input.roomId,
-                users: {
-                    create: {
-                        name: input.name,
-                        userId: input.userId,
-                        isHost: true,
-                        isFinder: false,
-                        isLiar: false,
-                        isTruther: false,
-                        isShushed: false,
-                        isChosen: false,
-                        isCorrectlyShushed: false,
-                        isCorrectlyChosen: false,
-                        score: 0
-                    }
-                },
-                isShushUsed: false,
-                isChoiceUsed: false,
-                isShowingText: false,
-                isGameStart: false,
-                title: "",
-                category: "",
-                text: "",
-                playerIds: [input.userId]
-            }
-        });
-    }),
+    createRoom: publicProcedure
+        .input(
+            z.object({
+                lang: z.string(),
+                roomId: z.string(),
+                userId: z.string(),
+                name: z.string()
+            })
+        )
+        .mutation(({ctx, input}) => {
+            return ctx.prisma.room.create({
+                data: {
+                    lang: input.lang,
+                    roomId: input.roomId,
+                    users: {
+                        create: {
+                            name: input.name,
+                            userId: input.userId,
+                            isHost: true,
+                            hasBeenFinder: false,
+                            isFinder: false,
+                            isLiar: false,
+                            isTruther: false,
+                            isShushed: false,
+                            isChosen: false,
+                            isCorrectlyShushed: false,
+                            isCorrectlyChosen: false,
+                            score: 0
+                        }
+                    },
+                    isShushUsed: false,
+                    isChoiceUsed: false,
+                    isShowingText: false,
+                    isGameStart: false,
+                    title: "",
+                    category: "",
+                    text: "",
+                    playerIds: [input.userId],
+                }
+            });
+        }),
     newGame: publicProcedure.input(z.object({roomId: z.string(), playerIds: z.string().array()})).mutation(({ctx, input}) => {
         return ctx.prisma.room.update({
             where: {
@@ -56,7 +61,8 @@ export const roomRouter = createTRPCRouter({
                 title: "",
                 category: "",
                 text: "",
-                playerIds: input.playerIds
+                playerIds: input.playerIds,
+                
             }
         });
     }),

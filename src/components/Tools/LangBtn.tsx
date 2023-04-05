@@ -6,9 +6,9 @@ type LangBtnProps = {
 };
 const LangBtn = ({lang, handleLangChange}: LangBtnProps) => {
     return (
-        <div onClick={handleLangChange} className={styles.button}>
-            {lang === "en" && <h3>🇭🇰🇹🇼</h3>}
-            {lang === "zh" && <h3>🇺🇸🇬🇧</h3>}
+        <div onClick={handleLangChange} className={styles.cornerBtn}>
+            {lang === "en" && "🇭🇰"}
+            {lang === "zh" && "🇺🇸"}
         </div>
     );
 };

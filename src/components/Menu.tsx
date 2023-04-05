@@ -60,7 +60,12 @@ const PlayerChoices = ({langJson, roomExist, joinRoomId, setJoinRoomId, handleHo
         <div className={styles.cardRow}>
             <HostBtn langJson={langJson} handleHost={handleHost} />
             <InputJoinId langJson={langJson} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} />
-            {roomExist && <JoinBtn langJson={langJson}  handleJoin={handleJoin} />}
+            {roomExist && <JoinBtn langJson={langJson} handleJoin={handleJoin} />}
+            {!roomExist && (
+                <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>{langJson.join}</h3>
+                </div>
+            )}
             <GithubBtn />
         </div>
     );

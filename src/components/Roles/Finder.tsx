@@ -124,6 +124,9 @@ const Finder = ({
             )}
             {isWaitingPlayer && (
                 <>
+                    <h1 style={{color: "white"}} className={styles.cardText}>
+                        {role}
+                    </h1>
                     <h1 className={styles.cardTitle}>
                         <span className={styles.yellowSpan}>{langJson.waitFinder}</span>
                     </h1>
@@ -132,9 +135,6 @@ const Finder = ({
                         <p className={styles.cardText}>{langJson.waitFinderMsg1}</p>
                         <p className={styles.cardText}>{langJson.waitFinderMsg2}</p>
                     </div>
-                    <h1 style={{color: "white"}} className={styles.cardText}>
-                        {role}
-                    </h1>
                 </>
             )}
             {isShushingPlayer && (

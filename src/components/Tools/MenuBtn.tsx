@@ -8,7 +8,8 @@ type MenuBtnProps = {
 
 const MenuBtn = ({returnMenu}: MenuBtnProps) => {
     return (
-        <div style={{alignItems: "center"}} onClick={returnMenu} className={styles.button}>
+        // <div style={{alignItems: "center"}} onClick={returnMenu} className={styles.button}>
+        <div onClick={returnMenu} className={styles.cornerBtn}>
             <DoorOpen />
         </div>
     );

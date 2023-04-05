@@ -9,7 +9,7 @@ type ChoosePlayerProps = {
 
 const ChoosePlayer = ({roomPlayersNoFinder,handleFunction}:ChoosePlayerProps) => {
     return (
-        <div  className={styles.card}>
+        <div  className={styles.cardRow}>
             {Array.from(Array(roomPlayersNoFinder.length).keys()).map((index) => (
                 <div key={index} onClick={() => handleFunction(roomPlayersNoFinder[index] as User)} className={styles.button}>
                     <p>{roomPlayersNoFinder[index]?.name}</p>

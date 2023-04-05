@@ -31,6 +31,7 @@ model User {
     roomId             String
     userId             String   @id
     isHost             Boolean
+    hasBeenFinder      Boolean
     isTruther          Boolean
     isLiar             Boolean
     isFinder           Boolean

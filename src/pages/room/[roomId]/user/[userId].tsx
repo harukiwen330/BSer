@@ -4,11 +4,13 @@ import {useRouter} from "next/router";
 import Loading from "~/components/Loading";
 import Player from "~/components/Player";
 import Ready from "~/components/Ready";
-import {newScore} from "~/functions/newScore";
 import {shuffleRole} from "~/functions/shuffleRole";
 import {api} from "../../../../utils/api";
 import en from "~/languages/en.json";
 import zh from "~/languages/zh.json";
+import {useState} from "react";
+import Manager from "~/components/Manager";
+import ManageBtn from "~/components/Tools/ManageBtn";
 
 export type WikipediaProps = {
     title: string;
@@ -24,7 +26,7 @@ const Lobby: NextPage = () => {
     const room = api.room.getRoom.useQuery({roomId: roomId}, {refetchInterval: 500}).data;
     const user = api.user.getUser.useQuery({userId: userId}, {refetchInterval: 500}).data;
     const roomUsers = api.user.getRoomUsers.useQuery({roomId: roomId}, {refetchInterval: 500, refetchOnMount: true}).data?.sort();
-
+    const [isManaging, setIsManaging] = useState(false);
     const invalidate = async () => {
         await utils.room.getRoom.invalidate({roomId: roomId});
         await utils.user.getUser.invalidate({userId: userId});
@@ -99,22 +101,22 @@ const Lobby: NextPage = () => {
         await router.push("/");
     };
     if (!room || !user || room === undefined || user === undefined || roomUsers === undefined) return <Loading returnMenu={returnMenu as VoidFunction} />;
+
     const langJson = room.lang === "en" ? en : zh;
     const roomPlayers = roomUsers.filter((player) => room?.playerIds.includes(player.userId));
     const role = user.isTruther ? langJson.truther : user.isFinder ? langJson.finder : langJson.liar;
     const roomPlayersNoFinder = roomPlayers?.slice().filter((player) => !player.isFinder);
 
     const handleNewGame = () => {
-        const roles = shuffleRole(roomUsers.length);
-        for (let i = 0; i < roomUsers.length; i++) {
-            const player = roomUsers?.[i] as User;
-            const score = player.score + newScore(player);
+        const roles = shuffleRole(roomUsers);
+        for (let i = 0; i < roles.length; i++) {
             newGameUser.mutate({
-                userId: roomUsers?.[i]?.userId as string,
+                hasBeenFinder: roles[i]?.hasBeenFinder as boolean,
+                userId: roles[i]?.playerId as string,
                 isTruther: roles[i]?.isTruther as boolean,
                 isLiar: roles[i]?.isLiar as boolean,
                 isFinder: roles[i]?.isFinder as boolean,
-                score: score
+                score: roles[i]?.score as number
             });
         }
         newGameRoom.mutate({
@@ -122,17 +124,26 @@ const Lobby: NextPage = () => {
             playerIds: roomUsers.map((player) => player.userId)
         });
     };
+
     const handleTimesUp = () => {
         hideText.mutate({roomId});
     };
     const handleLeave = async () => {
-        if (user?.isHost || roomUsers.length < 3) {
+        if (user?.isHost || roomUsers.length <= 3) {
             deleteRoomUsers.mutate({roomId: roomId});
             deleteRoom.mutate({roomId: roomId});
         } else {
             deleteUser.mutate({userId: userId});
         }
         await returnMenu();
+    };
+    const handleKick = (playerId: string) => {
+        if (roomUsers.length <= 3) {
+            deleteRoomUsers.mutate({roomId: roomId});
+            deleteRoom.mutate({roomId: roomId});
+        } else {
+            deleteUser.mutate({userId: playerId});
+        }
     };
     const handleLockWord = (title: string, category: string, text: string) => {
         lockWord.mutate({roomId, title, category, text});
@@ -158,8 +169,12 @@ const Lobby: NextPage = () => {
     };
     return (
         <>
-            {!user.isTruther && !user.isLiar && !user.isFinder && <Ready langJson={langJson} roomId={roomId} url={url} isHost={user.isHost} roomUsers={roomUsers} handleLeave={handleLeave as VoidFunction} handleNewGame={handleNewGame} />}
-            {(user.isTruther || user.isLiar || user.isFinder) && (
+            <ManageBtn isManaging={isManaging} setIsManaging={setIsManaging} />
+            {isManaging && <Manager isHost={user.isHost} handleKick={handleKick} baseUrl={"https://www.bser.app".concat(router.asPath.replace(userId, ""))} langJson={langJson} roomUsers={roomUsers} />}
+            {!user.isTruther && !user.isLiar && !user.isFinder && !isManaging && (
+                <Ready langJson={langJson} roomId={roomId} url={url} isHost={user.isHost} roomUsers={roomUsers} handleLeave={handleLeave as VoidFunction} handleNewGame={handleNewGame} />
+            )}
+            {(user.isTruther || user.isLiar || user.isFinder) && !isManaging && (
                 <Player
                     langJson={langJson}
                     role={role}

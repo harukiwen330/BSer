@@ -32,6 +32,7 @@ export const userRouter = createTRPCRouter({
                     roomId: input.roomId,
                     userId: input.userId,
                     isHost: false,
+                    hasBeenFinder: false,
                     isFinder: false,
                     isLiar: false,
                     isTruther: false,
@@ -47,6 +48,7 @@ export const userRouter = createTRPCRouter({
         .input(
             z.object({
                 userId: z.string(),
+                hasBeenFinder: z.boolean(),
                 isTruther: z.boolean(),
                 isFinder: z.boolean(),
                 isLiar: z.boolean(),
@@ -57,6 +59,7 @@ export const userRouter = createTRPCRouter({
             return ctx.prisma.user.update({
                 where: {userId: input.userId},
                 data: {
+                    hasBeenFinder: input.hasBeenFinder,
                     isTruther: input.isTruther,
                     isLiar: input.isLiar,
                     isFinder: input.isFinder,

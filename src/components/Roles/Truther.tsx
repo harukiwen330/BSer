@@ -1,6 +1,6 @@
 import type {Room, User} from "@prisma/client";
 import React from "react";
-import type { LangJsonProps } from "~/languages/langJsonProps";
+import type {LangJsonProps} from "~/languages/langJsonProps";
 import styles from "../../pages/index.module.css";
 import PlayerIdTag from "../Tools/PlayerIdTag";
 import ScoreBoard from "../Tools/ScoreBoard";
@@ -29,13 +29,13 @@ const Truther = ({langJson, isChoosingWord, isWaitingPlayer, isShushingPlayer, i
             )}
             {isWaitingPlayer && (
                 <>
+                    <h1 style={{color: "white"}} className={styles.cardText}>
+                        {role}
+                    </h1>
                     <h2 className={styles.cardTitle}>
                         <span className={styles.yellowSpan}>{langJson.readingOther}</span>
                     </h2>
                     <TruthInfo room={room} />
-                    <h1 style={{color: "white"}} className={styles.cardText}>
-                        {role}
-                    </h1>
                 </>
             )}
             {isShushingPlayer && (

@@ -1,10 +1,10 @@
 {
     "title": "吹水",
     "greet": "你好",
-    "namePlaceHolder": "名字 (max 7)",
+    "namePlaceHolder": "名字",
     "host": "創建大廳",
     "join": "加入大廳",
-    "joinPlaceHolder": "大廳 ID (max 4)",
+    "joinPlaceHolder": "大廳 ID",
     "copyQRCode": "Tab 以複製鏈結",
     "copiedQRCode": "已複製鏈結",
     "notEnoughMsg": "玩家人數不足",
@@ -30,5 +30,7 @@
     "isShushIsChosen": "尋真人讓你閉嘴卻選擇了你。",
     "notShushIsChosen": "尋真人選擇了你。",
     "scoreBoard":"計分板",
-    "readingLiar": "假裝你正在閱讀定義！ 想出虛假的描述並讓尋真人相信這是老實人！ 老實人具有事件日期、特定信息和位置等詳細信息。 一些提供的段落可能很長！ 模仿向下滾動的動作可以增強表演的真實感！"
+    "readingLiar": "假裝你正在閱讀定義！ 想出虛假的描述並讓尋真人相信這是老實人！ 老實人具有事件日期、特定信息和位置等詳細信息。 一些提供的段落可能很長！ 模仿向下滾動的動作可以增強表演的真實感！",
+    "managerScreen": "管理玩家",
+    "theHost": "主持人"
 }

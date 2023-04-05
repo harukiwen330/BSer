@@ -22,7 +22,7 @@ type PlyerProps = {
     handleLeave: () => void;
 };
 
-const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room, handleTimesUp, handleLockWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
+const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room,  handleTimesUp, handleLockWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
     const isChoosingWord = room.title === "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isWaitingPlayer = room.title !== "" && room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isShushingPlayer = room.title !== "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
@@ -30,6 +30,8 @@ const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room, h
     const isResult = room.title !== "" && !room.isShowingText && room.isShushUsed && room.isChoiceUsed;
     return (
         <main className={styles.main}>
+            <MenuBtn returnMenu={handleLeave} />
+            
             {user.isFinder && (
                 <Finder
                     langJson={langJson}
@@ -78,7 +80,6 @@ const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room, h
                     role={role}
                 />
             )}
-            <MenuBtn returnMenu={handleLeave} />
         </main>
     );
 };

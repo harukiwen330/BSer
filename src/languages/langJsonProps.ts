@@ -31,4 +31,6 @@ export type LangJsonProps = {
     notShushIsChosen: string;
     scoreBoard: string;
     readingLiar: string;
+    managerScreen: string;
+    theHost: string;
 };

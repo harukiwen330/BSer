@@ -29,17 +29,17 @@ const Liar = ({langJson, isChoosingWord, isWaitingPlayer, isShushingPlayer, isCh
             )}
             {isWaitingPlayer && (
                 <>
+                    <h1 style={{color: "white"}} className={styles.cardText}>
+                        {role}
+                    </h1>
                     <h2 className={styles.cardTitle}>
-                        <span className={styles.yellowSpan}>30s</span> to read
+                        <span className={styles.yellowSpan}>{langJson.readingOther}</span>
                     </h2>
                     <div className={styles.card}>
                         <h2>{room.title}</h2>
                         <p>{room.category}</p>
                         <p style={{textAlign: "left"}}>{langJson.readingLiar}</p>
                     </div>
-                    <h1 style={{color: "white"}} className={styles.cardText}>
-                        {role}
-                    </h1>
                 </>
             )}
             {isShushingPlayer && (

@@ -1,10 +1,10 @@
 {
     "title": "BSer",
     "greet": "Hello",
-    "namePlaceHolder": "Your Name (max 7)",
+    "namePlaceHolder": "Your Name",
     "host": "HOST",
     "join": "JOIN",
-    "joinPlaceHolder": "JOIN ID (max 4)",
+    "joinPlaceHolder": "JOIN ID",
     "copyQRCode": "Tab to copy link",
     "copiedQRCode": "Copied",
     "notEnoughMsg": "Not enough players",
@@ -13,11 +13,11 @@
     "finder": "Finder",
     "liar": "Liar",
     "truther": "Truth Teller",
-    "chooseWordMsg": "Choose a topic you don&apos;t know",
+    "chooseWordMsg": "Choose a topic",
     "choose": "Play with this topic",
     "change": "Change topic",
     "waitFinder": "Wait 30s",
-    "waitFinderMsg1": "After 30s, listen carefully to players&apos; definitions.",
+    "waitFinderMsg1": "After 30s, listen carefully to players' definitions.",
     "waitFinderMsg2": "Shush a player who you think is talking bs.",
     "shushFinder": "Choose a player to SHUSH",
     "pickFinder": "Pick the Truth Teller",
@@ -30,5 +30,7 @@
     "isShushIsChosen": "You got shushed & chosen by Finder, weirdly.",
     "notShushIsChosen" : "You have been chosen by Finder",
     "scoreBoard":"Score Board",
-    "readingLiar": "Pretend you&apos;re reading the definition! Invent the description and convince the Finder that it&apos;s true! The Truth Teller has details such as the event&apos;s date, specific information, and location. Some provided paragraphs can be quite lengthy! Mimicking the act of scrolling down can enhance the realism of your acting!"
+    "readingLiar": "Pretend you're reading the definition! Invent the description and convince the Finder that it's true! The Truth Teller has details such as the event's date, specific information, and location. Some provided paragraphs can be quite lengthy! Mimicking the act of scrolling down can enhance the realism of your acting!",
+    "managerScreen": "Manage Players",
+    "theHost": "Host"
 }
