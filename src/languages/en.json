@@ -32,5 +32,7 @@
     "scoreBoard":"Score Board",
     "readingLiar": "Pretend you're reading the definition! Invent the description and convince the Finder that it's true! The Truth Teller has details such as the event's date, specific information, and location. Some provided paragraphs can be quite lengthy! Mimicking the act of scrolling down can enhance the realism of your acting!",
     "managerScreen": "Manage Players",
-    "theHost": "Host"
+    "theHost": "Host",
+    "notExist": "Lobby no longer exists",
+    "entering": "Entering Lobby"
 }

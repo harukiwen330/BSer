@@ -6,6 +6,7 @@ import styles from "../../pages/index.module.css";
 
 type ManageListProps = {
     isHost: boolean;
+    isLoading: boolean;
     langJson: LangJsonProps;
     roomUsers: User[];
     setChosenId: Dispatch<SetStateAction<string>>;
@@ -13,7 +14,7 @@ type ManageListProps = {
     handleKick: (playerId: string) => void;
 };
 
-const ManageList = ({isHost, langJson, roomUsers, setChosenId, setPlayerName, handleKick}: ManageListProps) => {
+const ManageList = ({isHost, isLoading, langJson, roomUsers, setChosenId, setPlayerName, handleKick}: ManageListProps) => {
     const handleQrClick = (player: User) => {
         setChosenId(player.userId);
         setPlayerName(player.name);
@@ -31,7 +32,7 @@ const ManageList = ({isHost, langJson, roomUsers, setChosenId, setPlayerName, ha
                         <div key={index} onClick={() => handleQrClick(player)} className={styles.button}>
                             <QrCodeScan />
                         </div>
-                        {!player.isHost && isHost && (
+                        {!player.isHost && isHost && !isLoading && (
                             <div key={index} onClick={() => handleKick(player.userId)} className={styles.button}>
                                 <XCircleFill />
                             </div>

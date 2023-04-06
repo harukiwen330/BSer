@@ -1,5 +1,6 @@
 import type {Room, User} from "@prisma/client";
 import React from "react";
+import type {WikipediaProps} from "~/pages/room/[roomId]/user/[userId]";
 import type {LangJsonProps} from "../languages/langJsonProps";
 import styles from "../pages/index.module.css";
 import Finder from "./Roles/Finder";
@@ -8,21 +9,23 @@ import Truther from "./Roles/Truther";
 import MenuBtn from "./Tools/MenuBtn";
 
 type PlyerProps = {
+    isLoading: boolean;
+    words: WikipediaProps;
     langJson: LangJsonProps;
     role: string;
     room: Room;
     roomPlayers: User[];
     roomPlayersNoFinder: User[];
     user: User;
-    handleTimesUp: () => void;
-    handleLockWord: (title: string, category: string, text: string) => void;
+    handleChosenWord: () => void;
+    handleNextWord: () => void;
     handleShush: (player: User) => void;
     handleChoose: (player: User) => void;
     handleNewGame: () => void;
     handleLeave: () => void;
 };
 
-const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room,  handleTimesUp, handleLockWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
+const Player = ({isLoading, words, langJson, role, user, roomPlayersNoFinder, roomPlayers, room, handleChosenWord, handleNextWord, handleShush, handleChoose, handleNewGame, handleLeave}: PlyerProps) => {
     const isChoosingWord = room.title === "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isWaitingPlayer = room.title !== "" && room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
     const isShushingPlayer = room.title !== "" && !room?.isShowingText && !room.isShushUsed && !room.isChoiceUsed;
@@ -30,10 +33,12 @@ const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room,  
     const isResult = room.title !== "" && !room.isShowingText && room.isShushUsed && room.isChoiceUsed;
     return (
         <main className={styles.main}>
-            <MenuBtn returnMenu={handleLeave} />
-            
+            {!isLoading && <MenuBtn returnMenu={handleLeave} />}
+
             {user.isFinder && (
                 <Finder
+                    isLoading={isLoading}
+                    words={words}
                     langJson={langJson}
                     isChoosingWord={isChoosingWord}
                     isChoosingPlayer={isChoosingPlayer}
@@ -45,8 +50,8 @@ const Player = ({langJson, role, user, roomPlayersNoFinder, roomPlayers, room,  
                     roomPlayersNoFinder={roomPlayersNoFinder}
                     roomPlayers={roomPlayers}
                     room={room}
-                    handleTimesUp={handleTimesUp}
-                    handleLockWord={handleLockWord}
+                    handleChosenWord={handleChosenWord}
+                    handleNextWord={handleNextWord}
                     handleNewGame={handleNewGame}
                     handleShush={handleShush}
                     handleChoose={handleChoose}

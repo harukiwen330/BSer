@@ -3,6 +3,7 @@ import React, {type Dispatch, type SetStateAction, useState} from "react";
 import {CheckCircleFill} from "react-bootstrap-icons";
 import type {LangJsonProps} from "~/languages/langJsonProps";
 import styles from "../pages/index.module.css";
+import Entering from "./Entering";
 import GithubBtn from "./Tools/GithubBtn";
 import HostBtn from "./Tools/HostBtn";
 import InputJoinId from "./Tools/InputJoinId";
@@ -12,6 +13,7 @@ import LangBtn from "./Tools/LangBtn";
 import Title from "./Tools/Title";
 
 type MenuProps = {
+    isLoading: boolean;
     room: Room | null | undefined;
     joinRoomId: string;
     playerName: string;
@@ -33,32 +35,35 @@ type PlayerChoicesProps = {
     handleJoin: () => void;
 };
 
-const Menu = ({room, joinRoomId, lang, langJson, setJoinRoomId, playerName, setPlayerName, handleJoin, handleHost, handleLangChange}: MenuProps) => {
+const Menu = ({isLoading, room, joinRoomId, lang, langJson, setJoinRoomId, playerName, setPlayerName, handleJoin, handleHost, handleLangChange}: MenuProps) => {
     const roomExist = room !== null && room !== undefined;
     const nameNotEmpty = playerName.replace(/[\W_]+/g, "") !== "";
     const [isConfirmName, setIsConfirmName] = useState(false);
-    return (
-        <main className={styles.main}>
-            <div className={styles.container}>
-                <LangBtn lang={lang} handleLangChange={handleLangChange} />
-                <Title langJson={langJson} />
-                <InputName langJson={langJson} isConfirmName={isConfirmName} setIsConfirmName={setIsConfirmName} playerName={playerName} setPlayerName={setPlayerName} />
-                {!isConfirmName && nameNotEmpty && (
-                    <div className={styles.button} onClick={() => setIsConfirmName(true)}>
-                        <CheckCircleFill />
-                    </div>
-                )}
+    if (!isLoading) {
+        return (
+            <main className={styles.main}>
+                <div className={styles.container}>
+                    <LangBtn lang={lang} handleLangChange={handleLangChange} />
+                    <Title langJson={langJson} />
+                    <InputName langJson={langJson} isConfirmName={isConfirmName} setIsConfirmName={setIsConfirmName} playerName={playerName} setPlayerName={setPlayerName} />
+                    {!isConfirmName && nameNotEmpty && (
+                        <div className={styles.button} onClick={() => setIsConfirmName(true)}>
+                            <CheckCircleFill />
+                        </div>
+                    )}
 
-                {nameNotEmpty && isConfirmName && <PlayerChoices langJson={langJson} roomExist={roomExist} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} handleHost={handleHost} handleJoin={handleJoin} />}
-            </div>
-        </main>
-    );
+                    {nameNotEmpty && isConfirmName && <PlayerChoices langJson={langJson} roomExist={roomExist} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} handleHost={handleHost} handleJoin={handleJoin} />}
+                </div>
+            </main>
+        );
+    }
+    return <Entering langJson={langJson} />;
 };
 
 const PlayerChoices = ({langJson, roomExist, joinRoomId, setJoinRoomId, handleHost, handleJoin}: PlayerChoicesProps) => {
     return (
         <div className={styles.cardRow}>
-            <HostBtn langJson={langJson} handleHost={handleHost} />
+            {<HostBtn langJson={langJson} handleHost={handleHost} />}
             <InputJoinId langJson={langJson} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} />
             {roomExist && <JoinBtn langJson={langJson} handleJoin={handleJoin} />}
             {!roomExist && (

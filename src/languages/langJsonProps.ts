@@ -33,4 +33,6 @@ export type LangJsonProps = {
     readingLiar: string;
     managerScreen: string;
     theHost: string;
+    notExist: string;
+    entering: string;
 };

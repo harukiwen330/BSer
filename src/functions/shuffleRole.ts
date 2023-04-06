@@ -1,10 +1,10 @@
 import type {User} from "@prisma/client";
-import {sample, without} from "underscore";
+import {sample} from "underscore";
 import {newScore} from "./newScore";
 
 export function shuffleRole(roomUsers: User[]) {
     const roles: {
-        playerId: string;
+        userId: string;
         hasBeenFinder: boolean;
         isTruther: boolean;
         isLiar: boolean;
@@ -14,39 +14,37 @@ export function shuffleRole(roomUsers: User[]) {
     const neverBeenFinder = roomUsers.filter((user) => !user.hasBeenFinder);
     const reset = neverBeenFinder.length === 0;
     const newFinder = reset ? (sample(roomUsers) as User) : (sample(neverBeenFinder) as User);
-    const newTruther = sample(without(roomUsers, newFinder)) as User;
-
-    roles.push(
-        {
-            playerId: newFinder.userId,
-            hasBeenFinder: true,
-            isTruther: false,
-            isFinder: true,
-            isLiar: false,
-            score: newFinder.score + newScore(newFinder)
-        },
-        {
-            playerId: newTruther.userId,
-            hasBeenFinder: reset ? false : newTruther.hasBeenFinder,
-            isTruther: true,
-            isFinder: false,
-            isLiar: false,
-            score: newTruther.score + newScore(newTruther)
-        }
-    );
-
+    const noNewFinder = roomUsers.filter((user) => user.userId !== newFinder.userId);
+    const newTruther = sample(noNewFinder) as User;
+    
     for (let i = 0; i < roomUsers.length; i++) {
-        if (roomUsers[i]?.userId !== newFinder.userId  &&
-            roomUsers[i]?.userId !== newTruther.userId) {
+        if (roomUsers[i] !== newFinder && roomUsers[i] !== newTruther) {
+            const player = roomUsers[i] as User;
             roles.push({
-                playerId: roomUsers[i]?.userId as string,
-                hasBeenFinder: reset ? false : (roomUsers[i]?.hasBeenFinder as boolean),
+                userId: player.userId,
+                hasBeenFinder: reset ? false : player.hasBeenFinder,
                 isTruther: false,
                 isFinder: false,
                 isLiar: true,
-                score: (roomUsers[i]?.score as number) + newScore(roomUsers[i] as User)
+                score: player.score + newScore(player)
             });
         }
     }
+    roles.push({
+        userId: newFinder.userId,
+        hasBeenFinder: true,
+        isTruther: false,
+        isFinder: true,
+        isLiar: false,
+        score: newFinder.score + newScore(newFinder)
+    });
+    roles.push({
+        userId: newTruther.userId,
+        hasBeenFinder: reset ? false : newTruther.hasBeenFinder,
+        isTruther: true,
+        isFinder: false,
+        isLiar: false,
+        score: newTruther.score + newScore(newTruther)
+    });
     return roles;
 }

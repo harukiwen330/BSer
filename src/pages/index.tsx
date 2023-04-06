@@ -18,16 +18,27 @@ const Home: NextPage = () => {
     const [joinRoomId, setJoinRoomId] = useState("");
     const [lang, setLang] = useState("en");
     const [langJson, setLangJson] = useState(en);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [roomId] = useState(customAlphabet(alphabet, 4));
     const [userId] = useState(nanoid);
 
     const room = api.room.getRoom.useQuery({roomId: joinRoomId}, {refetchInterval: 500}).data;
+
+    const cleanUsers = api.user.cleanUsers.useMutation({
+        onMutate() {
+            setIsLoading(true);
+        }
+    });
+    const cleanRoom = api.room.cleanRoom.useMutation();
+
     const createRoom = api.room.createRoom.useMutation({
         async onSuccess() {
             await utils.room.getRoom.invalidate({roomId: roomId});
             await utils.user.getUser.invalidate({userId: userId});
-            await utils.user.getRoomUsers.invalidate({roomId: roomId}).then(async () => await router.push(`/room/${roomId}/user/${userId}`));
+            await utils.user.getRoomUsers.invalidate({roomId: roomId});
+            await router.push(`/room/${roomId}/user/${userId}`);
+            setIsLoading(false);
         }
     });
     const createUser = api.user.createUser.useMutation({
@@ -36,10 +47,9 @@ const Home: NextPage = () => {
             await utils.user.getUser.invalidate({userId: userId});
             await utils.user.getRoomUsers.invalidate({roomId: joinRoomId});
             await router.push(`/room/${joinRoomId}/user/${userId}`);
+            setIsLoading(false);
         }
     });
-    const cleanUsers = api.user.cleanUsers.useMutation();
-    const cleanRoom = api.room.cleanRoom.useMutation();
     const handleHost = () => {
         cleanUsers.mutate();
         cleanRoom.mutate();
@@ -67,11 +77,23 @@ const Home: NextPage = () => {
                     <meta name="description" content="A Game Full of BS." />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
-                <Menu lang={lang} langJson={langJson} room={room} playerName={playerName} setPlayerName={setPlayerName} joinRoomId={joinRoomId} setJoinRoomId={setJoinRoomId} handleJoin={handleJoin} handleHost={handleHost} handleLangChange={handleLangChange}/>
+                <Menu
+                    isLoading={isLoading}
+                    lang={lang}
+                    langJson={langJson}
+                    room={room}
+                    playerName={playerName}
+                    setPlayerName={setPlayerName}
+                    joinRoomId={joinRoomId}
+                    setJoinRoomId={setJoinRoomId}
+                    handleJoin={handleJoin}
+                    handleHost={handleHost}
+                    handleLangChange={handleLangChange}
+                />
             </>
         );
     }
-    return <Entering />;
+    return <Entering langJson={langJson}/>;
 };
 
 export default Home;

@@ -1,5 +1,5 @@
 import type {Room, User} from "@prisma/client";
-import React, {useEffect, useState} from "react";
+import React  from "react";
 import styles from "../../pages/index.module.css";
 import type {WikipediaProps} from "~/pages/room/[roomId]/user/[userId]";
 import ScoreBoard from "../Tools/ScoreBoard";
@@ -10,6 +10,8 @@ import TruthInfo from "../Tools/TruthInfo";
 import type {LangJsonProps} from "~/languages/langJsonProps";
 
 type FinderProps = {
+    isLoading: boolean;
+    words: WikipediaProps;
     langJson: LangJsonProps;
     isChoosingWord: boolean;
     isWaitingPlayer: boolean;
@@ -21,14 +23,16 @@ type FinderProps = {
     roomPlayersNoFinder: User[];
     roomPlayers: User[];
     room: Room;
-    handleTimesUp: () => void;
-    handleLockWord: (title: string, category: string, text: string) => void;
+    handleChosenWord: () => void;
+    handleNextWord: () => void;
     handleShush: (player: User) => void;
     handleChoose: (player: User) => void;
     handleNewGame: () => void;
 };
 
 const Finder = ({
+    isLoading,
+    words,
     langJson,
     isChoosingWord,
     isWaitingPlayer,
@@ -40,69 +44,12 @@ const Finder = ({
     roomPlayersNoFinder,
     roomPlayers,
     room,
-    handleTimesUp,
-    handleLockWord,
+    handleChosenWord,
+    handleNextWord,
     handleShush,
     handleChoose,
     handleNewGame
 }: FinderProps) => {
-    const [words, setWords] = useState<WikipediaProps>({
-        title: "",
-        category: "",
-        text: ""
-    });
-    const [initialFetch, setInitialFetch] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (user.isFinder && !initialFetch) {
-            const fetchData = async () => {
-                await fetchWords();
-                setInitialFetch(true);
-            };
-
-            void fetchData();
-        }
-    }, [user, initialFetch]);
-
-    const fetchWords = async (): Promise<void> => {
-        try {
-            // eslint-disable-next-line
-            const response = require("wtf_wikipedia").extend(require("wtf-plugin-api")).extend(require("wtf-plugin-classify"));
-            // eslint-disable-next-line
-            const OpenCC = require("opencc-js");
-            // eslint-disable-next-line
-            const converter = OpenCC.Converter({from: "cn", to: "hk"});
-            // eslint-disable-next-line
-            const getRandomPage = response.getRandomPage as (options: {lang: string}) => Promise<{title: () => string; classify: () => {type: string}; category: () => string; text: () => string}>;
-            const doc = await getRandomPage({lang: room.lang});
-            // eslint-disable-next-line
-            const title: string = room.lang === "en" ? doc.title() : converter(doc.title());
-            // eslint-disable-next-line
-            const category: string = room.lang === "en" ? doc.classify().type : converter(doc.category());
-            // eslint-disable-next-line
-            const text: string = room.lang === "en" ? doc.text() : converter(doc.text());
-
-            setWords({
-                title: title,
-                category: category,
-                text: text
-            });
-        } catch (error) {
-            console.error("Error fetching random Wikipedia page:", error);
-        }
-    };
-
-    const handleNextWord = () => {
-        void fetchWords();
-    };
-
-    const handleChosenWord = () => {
-        handleLockWord(words?.title, words?.category, words?.text);
-        setTimeout(() => {
-            void handleTimesUp();
-        }, 31000);
-    };
-
     return (
         <div className={styles.container}>
             {isChoosingWord && (
@@ -113,12 +60,16 @@ const Finder = ({
                     <div className={styles.card}>
                         <h2>{words.title}</h2>
                         <p>{words.category}</p>
-                        <div style={{textAlign: "center"}} className={styles.button} onClick={handleChosenWord}>
-                            <span className={styles.yellowSpan}>{langJson.choose}</span>
-                        </div>
-                        <div style={{textAlign: "center"}} className={styles.button} onClick={handleNextWord}>
-                            {langJson.change}
-                        </div>
+                        {!isLoading && (
+                            <>
+                                <div style={{textAlign: "center"}} className={styles.button} onClick={handleChosenWord}>
+                                    <span className={styles.yellowSpan}>{langJson.choose}</span>
+                                </div>
+                                <div style={{textAlign: "center"}} className={styles.button} onClick={handleNextWord}>
+                                    {langJson.change}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </>
             )}
@@ -144,7 +95,7 @@ const Finder = ({
                     <p className={styles.cardTitle}>
                         <span className={styles.redSpan}>{langJson.shushFinder}</span>
                     </p>
-                    <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleShush} />
+                    {!isLoading && <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleShush} />}
                 </>
             )}
             {isChoosingPlayer && (
@@ -154,23 +105,18 @@ const Finder = ({
                     <h2 className={styles.cardTitle}>
                         <span className={styles.greenSpan}>{langJson.pickFinder}</span>
                     </h2>
-                    <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleChoose} />
+                    {!isLoading && <ChoosePlayer roomPlayersNoFinder={roomPlayersNoFinder} handleFunction={handleChoose} />}
                 </>
             )}
             {isResult && (
                 <>
                     <PlayerIdTag langJson={langJson} user={user} />
                     <ScoreBoard langJson={langJson} roomPlayers={roomPlayers} />
-                    <div
-                        style={{textAlign: "center"}}
-                        className={styles.button}
-                        onClick={() => {
-                            handleNewGame();
-                            void fetchWords();
-                        }}
-                    >
-                        {langJson.newGame}
-                    </div>
+                    {!isLoading && (
+                        <div style={{textAlign: "center"}} className={styles.button} onClick={handleNewGame}>
+                            {langJson.newGame}
+                        </div>
+                    )}
                     <TruthInfo room={room} />
                 </>
             )}
