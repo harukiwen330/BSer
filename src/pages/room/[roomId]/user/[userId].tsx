@@ -258,7 +258,7 @@ const Lobby: NextPage = () => {
         <>
             <ManageBtn isManaging={isManaging} setIsManaging={setIsManaging} />
             {isManaging && (
-                <Manager isHost={user.isHost} isLoading={isLoading} handleKick={handleKick} baseUrl={"https://www.bser.app".concat(router.asPath.replace(userId, ""))} langJson={langJson} roomUsers={roomUsers} />
+                <Manager roomId={room.roomId} isHost={user.isHost} isLoading={isLoading} handleKick={handleKick} baseUrl={"https://www.bser.app".concat(router.asPath.replace(`/user/${userId}`, ""))} langJson={langJson} roomUsers={roomUsers} />
             )}
             {!user.isTruther && !user.isLiar && !user.isFinder && !isManaging && (
                 <Ready langJson={langJson} roomId={roomId} url={url} isHost={user.isHost} roomUsers={roomUsers} handleLeave={handleLeave as VoidFunction} handleNewGame={handleNewGame} />

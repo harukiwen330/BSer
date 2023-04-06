@@ -16,12 +16,24 @@ type ManageListProps = {
 
 const ManageList = ({isHost, isLoading, langJson, roomUsers, setChosenId, setPlayerName, handleKick}: ManageListProps) => {
     const handleQrClick = (player: User) => {
-        setChosenId(player.userId);
+        setChosenId(`/user/${player.userId}`);
         setPlayerName(player.name);
+    };
+    const handleLobbyIdClick = () => {
+        setChosenId("");
+        setPlayerName("");
     };
     return (
         <div className={styles.card}>
             <h1 className={styles.cardTitle}>{langJson.managerScreen}</h1>
+            <div className={styles.manageRow}>
+                <div style={{fontSize: "12px"}} className={styles.card}>
+                    {langJson.joinPlaceHolder}
+                </div>
+                <div onClick={handleLobbyIdClick} className={styles.button}>
+                    <QrCodeScan />
+                </div>
+            </div>
             {Array.from(Array(roomUsers.length).keys()).map((index) => {
                 const player = roomUsers[index] as User;
                 return (

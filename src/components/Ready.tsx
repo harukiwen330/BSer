@@ -20,6 +20,7 @@ const Ready = ({langJson, roomId, url, isHost, roomUsers, handleLeave, handleNew
     return (
         <main className={styles.main}>
             <h1 className={styles.title}>{roomId}</h1>
+            <br />
             <span className={styles.yellowSpan}>
                 <i>{roomUsers.length}/7</i>
             </span>

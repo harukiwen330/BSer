@@ -7,6 +7,7 @@ import QrCode from "./Tools/QrCode";
 
 type ManagerProps = {
     isHost: boolean;
+    roomId: string;
     isLoading: boolean;
     baseUrl: string;
     langJson: LangJsonProps;
@@ -14,13 +15,15 @@ type ManagerProps = {
     handleKick: (playerId: string) => void;
 };
 
-const Manager = ({isHost, isLoading, baseUrl, langJson, roomUsers, handleKick}: ManagerProps) => {
+const Manager = ({isHost, roomId, isLoading, baseUrl, langJson, roomUsers, handleKick}: ManagerProps) => {
     const [chosenId, setChosenId] = useState("");
     const [playerName, setPlayerName] = useState("");
     return (
         <main className={styles.main}>
-            {playerName !== "" && <h1 className={styles.cardTitle}>{playerName}</h1>}
-            {chosenId !== "" && <QrCode langJson={langJson} url={baseUrl.concat(chosenId)} />}
+            <h1 className={styles.title}>{roomId}</h1>
+            <br />
+            {playerName !== "" && <h1 className={styles.title}>{playerName}</h1>}
+            <QrCode langJson={langJson} url={baseUrl.concat(chosenId)} />
             <ManageList isHost={isHost} isLoading={isLoading} langJson={langJson} roomUsers={roomUsers} setPlayerName={setPlayerName} setChosenId={setChosenId} handleKick={handleKick} />
         </main>
     );
